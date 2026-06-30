@@ -37,3 +37,11 @@ export function deleteSupplier(id) {
     method: 'delete'
   })
 }
+
+export function updateSupplierStatus(id, status) {
+  return request({
+    url: `/suppliers/${id}/status`,
+    method: 'put',
+    params: { status }
+  })
+}

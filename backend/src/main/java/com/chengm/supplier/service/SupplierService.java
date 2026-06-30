@@ -15,4 +15,6 @@ public interface SupplierService {
     void update(Supplier supplier);
 
     void delete(Long id);
+
+    void updateStatus(Long id, Integer status);
 }

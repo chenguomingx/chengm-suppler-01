@@ -43,4 +43,10 @@ public class SupplierController {
         supplierService.delete(id);
         return Result.success();
     }
+
+    @PutMapping("/{id}/status")
+    public Result<Void> updateStatus(@PathVariable Long id, @RequestParam Integer status) {
+        supplierService.updateStatus(id, status);
+        return Result.success();
+    }
 }

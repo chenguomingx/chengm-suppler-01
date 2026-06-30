@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,6 +17,46 @@ public class Supplier implements Serializable {
 
     @NotBlank(message = "供应商名称不能为空")
     private String supplierName;
+
+    private String unifiedSocialCreditCode;
+
+    private String legalRepresentative;
+
+    private BigDecimal registeredCapital;
+
+    private LocalDate establishmentDate;
+
+    private String businessStatus;
+
+    private String province;
+
+    private String city;
+
+    private String district;
+
+    private String businessRegistrationNumber;
+
+    private String organizationCode;
+
+    private String taxpayerIdentificationNumber;
+
+    private String registrationAuthority;
+
+    private LocalDate approvalDate;
+
+    private LocalDate businessTermStart;
+
+    private LocalDate businessTermEnd;
+
+    private String enterpriseType;
+
+    private String industry;
+
+    private String businessScope;
+
+    private String formerName;
+
+    private Integer insuranceCount;
 
     private String contactPerson;
 

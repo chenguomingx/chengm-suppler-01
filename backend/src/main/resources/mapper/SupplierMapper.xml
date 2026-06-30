@@ -6,6 +6,26 @@
     <resultMap id="BaseResultMap" type="com.chengm.supplier.entity.Supplier">
         <id column="id" property="id"/>
         <result column="supplier_name" property="supplierName"/>
+        <result column="unified_social_credit_code" property="unifiedSocialCreditCode"/>
+        <result column="legal_representative" property="legalRepresentative"/>
+        <result column="registered_capital" property="registeredCapital"/>
+        <result column="establishment_date" property="establishmentDate"/>
+        <result column="business_status" property="businessStatus"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="district" property="district"/>
+        <result column="business_registration_number" property="businessRegistrationNumber"/>
+        <result column="organization_code" property="organizationCode"/>
+        <result column="taxpayer_identification_number" property="taxpayerIdentificationNumber"/>
+        <result column="registration_authority" property="registrationAuthority"/>
+        <result column="approval_date" property="approvalDate"/>
+        <result column="business_term_start" property="businessTermStart"/>
+        <result column="business_term_end" property="businessTermEnd"/>
+        <result column="enterprise_type" property="enterpriseType"/>
+        <result column="industry" property="industry"/>
+        <result column="business_scope" property="businessScope"/>
+        <result column="former_name" property="formerName"/>
+        <result column="insurance_count" property="insuranceCount"/>
         <result column="contact_person" property="contactPerson"/>
         <result column="contact_phone" property="contactPhone"/>
         <result column="contact_email" property="contactEmail"/>
@@ -17,7 +37,12 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, supplier_name, contact_person, contact_phone, contact_email, address, remark, status, create_time, update_time
+        id, supplier_name, unified_social_credit_code, legal_representative, registered_capital,
+        establishment_date, business_status, province, city, district, business_registration_number,
+        organization_code, taxpayer_identification_number, registration_authority, approval_date,
+        business_term_start, business_term_end, enterprise_type, industry, business_scope,
+        former_name, insurance_count, contact_person, contact_phone, contact_email, address,
+        remark, status, create_time, update_time
     </sql>
 
     <select id="selectList" resultMap="BaseResultMap">
@@ -27,7 +52,9 @@
             <if test="keyword != null and keyword != ''">
                 AND (supplier_name LIKE CONCAT('%', #{keyword}, '%')
                 OR contact_person LIKE CONCAT('%', #{keyword}, '%')
-                OR contact_phone LIKE CONCAT('%', #{keyword}, '%'))
+                OR contact_phone LIKE CONCAT('%', #{keyword}, '%')
+                OR unified_social_credit_code LIKE CONCAT('%', #{keyword}, '%')
+                OR legal_representative LIKE CONCAT('%', #{keyword}, '%'))
             </if>
         </where>
         ORDER BY create_time DESC
@@ -49,6 +76,26 @@
         INSERT INTO supplier
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="supplierName != null">supplier_name,</if>
+            <if test="unifiedSocialCreditCode != null">unified_social_credit_code,</if>
+            <if test="legalRepresentative != null">legal_representative,</if>
+            <if test="registeredCapital != null">registered_capital,</if>
+            <if test="establishmentDate != null">establishment_date,</if>
+            <if test="businessStatus != null">business_status,</if>
+            <if test="province != null">province,</if>
+            <if test="city != null">city,</if>
+            <if test="district != null">district,</if>
+            <if test="businessRegistrationNumber != null">business_registration_number,</if>
+            <if test="organizationCode != null">organization_code,</if>
+            <if test="taxpayerIdentificationNumber != null">taxpayer_identification_number,</if>
+            <if test="registrationAuthority != null">registration_authority,</if>
+            <if test="approvalDate != null">approval_date,</if>
+            <if test="businessTermStart != null">business_term_start,</if>
+            <if test="businessTermEnd != null">business_term_end,</if>
+            <if test="enterpriseType != null">enterprise_type,</if>
+            <if test="industry != null">industry,</if>
+            <if test="businessScope != null">business_scope,</if>
+            <if test="formerName != null">former_name,</if>
+            <if test="insuranceCount != null">insurance_count,</if>
             <if test="contactPerson != null">contact_person,</if>
             <if test="contactPhone != null">contact_phone,</if>
             <if test="contactEmail != null">contact_email,</if>
@@ -58,6 +105,26 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="supplierName != null">#{supplierName},</if>
+            <if test="unifiedSocialCreditCode != null">#{unifiedSocialCreditCode},</if>
+            <if test="legalRepresentative != null">#{legalRepresentative},</if>
+            <if test="registeredCapital != null">#{registeredCapital},</if>
+            <if test="establishmentDate != null">#{establishmentDate},</if>
+            <if test="businessStatus != null">#{businessStatus},</if>
+            <if test="province != null">#{province},</if>
+            <if test="city != null">#{city},</if>
+            <if test="district != null">#{district},</if>
+            <if test="businessRegistrationNumber != null">#{businessRegistrationNumber},</if>
+            <if test="organizationCode != null">#{organizationCode},</if>
+            <if test="taxpayerIdentificationNumber != null">#{taxpayerIdentificationNumber},</if>
+            <if test="registrationAuthority != null">#{registrationAuthority},</if>
+            <if test="approvalDate != null">#{approvalDate},</if>
+            <if test="businessTermStart != null">#{businessTermStart},</if>
+            <if test="businessTermEnd != null">#{businessTermEnd},</if>
+            <if test="enterpriseType != null">#{enterpriseType},</if>
+            <if test="industry != null">#{industry},</if>
+            <if test="businessScope != null">#{businessScope},</if>
+            <if test="formerName != null">#{formerName},</if>
+            <if test="insuranceCount != null">#{insuranceCount},</if>
             <if test="contactPerson != null">#{contactPerson},</if>
             <if test="contactPhone != null">#{contactPhone},</if>
             <if test="contactEmail != null">#{contactEmail},</if>
@@ -71,6 +138,26 @@
         UPDATE supplier
         <set>
             <if test="supplierName != null">supplier_name = #{supplierName},</if>
+            <if test="unifiedSocialCreditCode != null">unified_social_credit_code = #{unifiedSocialCreditCode},</if>
+            <if test="legalRepresentative != null">legal_representative = #{legalRepresentative},</if>
+            <if test="registeredCapital != null">registered_capital = #{registeredCapital},</if>
+            <if test="establishmentDate != null">establishment_date = #{establishmentDate},</if>
+            <if test="businessStatus != null">business_status = #{businessStatus},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="district != null">district = #{district},</if>
+            <if test="businessRegistrationNumber != null">business_registration_number = #{businessRegistrationNumber},</if>
+            <if test="organizationCode != null">organization_code = #{organizationCode},</if>
+            <if test="taxpayerIdentificationNumber != null">taxpayer_identification_number = #{taxpayerIdentificationNumber},</if>
+            <if test="registrationAuthority != null">registration_authority = #{registrationAuthority},</if>
+            <if test="approvalDate != null">approval_date = #{approvalDate},</if>
+            <if test="businessTermStart != null">business_term_start = #{businessTermStart},</if>
+            <if test="businessTermEnd != null">business_term_end = #{businessTermEnd},</if>
+            <if test="enterpriseType != null">enterprise_type = #{enterpriseType},</if>
+            <if test="industry != null">industry = #{industry},</if>
+            <if test="businessScope != null">business_scope = #{businessScope},</if>
+            <if test="formerName != null">former_name = #{formerName},</if>
+            <if test="insuranceCount != null">insurance_count = #{insuranceCount},</if>
             <if test="contactPerson != null">contact_person = #{contactPerson},</if>
             <if test="contactPhone != null">contact_phone = #{contactPhone},</if>
             <if test="contactEmail != null">contact_email = #{contactEmail},</if>
@@ -79,6 +166,10 @@
             <if test="status != null">status = #{status},</if>
         </set>
         WHERE id = #{id}
+    </update>
+
+    <update id="updateStatus">
+        UPDATE supplier SET status = #{status} WHERE id = #{id}
     </update>
 
     <delete id="deleteById">

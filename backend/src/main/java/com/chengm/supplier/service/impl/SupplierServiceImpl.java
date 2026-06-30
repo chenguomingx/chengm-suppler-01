@@ -74,4 +74,14 @@ public class SupplierServiceImpl implements SupplierService {
         supplierMapper.deleteById(id);
         redisTemplate.delete(SUPPLIER_CACHE_KEY);
     }
+
+    @Override
+    public void updateStatus(Long id, Integer status) {
+        Supplier exist = supplierMapper.selectById(id);
+        if (exist == null) {
+            throw new RuntimeException("供应商不存在");
+        }
+        supplierMapper.updateStatus(id, status);
+        redisTemplate.delete(SUPPLIER_CACHE_KEY);
+    }
 }

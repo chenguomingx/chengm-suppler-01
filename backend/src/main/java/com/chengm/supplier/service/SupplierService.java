@@ -1,12 +1,11 @@
 package com.chengm.supplier.service;
 
+import com.chengm.supplier.common.PageResult;
 import com.chengm.supplier.entity.Supplier;
-
-import java.util.List;
 
 public interface SupplierService {
 
-    List<Supplier> list(String keyword);
+    PageResult<Supplier> page(String keyword, long pageNum, long pageSize);
 
     Supplier getById(Long id);
 

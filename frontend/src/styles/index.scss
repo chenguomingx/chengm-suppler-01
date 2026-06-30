@@ -31,6 +31,12 @@
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 }
 
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
 .mt-10 {
   margin-top: 10px;
 }

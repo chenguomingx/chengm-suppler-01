@@ -9,9 +9,15 @@ public interface SupplierMapper {
 
     List<Supplier> selectList(@Param("keyword") String keyword);
 
+    List<Supplier> selectPage(@Param("keyword") String keyword, @Param("offset") long offset, @Param("pageSize") long pageSize);
+
+    long selectCount(@Param("keyword") String keyword);
+
     Supplier selectById(@Param("id") Long id);
 
     Supplier selectByName(@Param("supplierName") String supplierName);
+
+    Supplier selectByUnifiedSocialCreditCode(@Param("unifiedSocialCreditCode") String unifiedSocialCreditCode);
 
     int insert(Supplier supplier);
 

@@ -60,6 +60,36 @@
         ORDER BY create_time DESC
     </select>
 
+    <select id="selectPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM supplier
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (supplier_name LIKE CONCAT('%', #{keyword}, '%')
+                OR contact_person LIKE CONCAT('%', #{keyword}, '%')
+                OR contact_phone LIKE CONCAT('%', #{keyword}, '%')
+                OR unified_social_credit_code LIKE CONCAT('%', #{keyword}, '%')
+                OR legal_representative LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="selectCount" resultType="long">
+        SELECT COUNT(1)
+        FROM supplier
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (supplier_name LIKE CONCAT('%', #{keyword}, '%')
+                OR contact_person LIKE CONCAT('%', #{keyword}, '%')
+                OR contact_phone LIKE CONCAT('%', #{keyword}, '%')
+                OR unified_social_credit_code LIKE CONCAT('%', #{keyword}, '%')
+                OR legal_representative LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+    </select>
+
     <select id="selectById" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/>
         FROM supplier
@@ -70,6 +100,12 @@
         SELECT <include refid="Base_Column_List"/>
         FROM supplier
         WHERE supplier_name = #{supplierName}
+    </select>
+
+    <select id="selectByUnifiedSocialCreditCode" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM supplier
+        WHERE unified_social_credit_code = #{unifiedSocialCreditCode}
     </select>
 
     <insert id="insert" parameterType="com.chengm.supplier.entity.Supplier" useGeneratedKeys="true" keyProperty="id">

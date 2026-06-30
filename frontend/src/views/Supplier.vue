@@ -49,16 +49,39 @@
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="180" />
-        <el-table-column label="操作" width="260" align="center" fixed="right">
+        <el-table-column label="操作" width="320" align="center" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" link :icon="View" @click="handleView(row)">详情</el-button>
-            <el-button type="success" link v-if="row.status === 1" @click="handleToggleStatus(row, 0)">禁用</el-button>
-            <el-button type="warning" link v-else @click="handleToggleStatus(row, 1)">启用</el-button>
             <el-button type="primary" link :icon="Edit" @click="handleEdit(row)">编辑</el-button>
-            <el-button type="danger" link :icon="Delete" @click="handleDelete(row)">删除</el-button>
+            <el-button
+              type="warning"
+              size="small"
+              v-if="row.status === 1"
+              @click="handleToggleStatus(row, 0)"
+            >禁用</el-button>
+            <el-button
+              type="success"
+              size="small"
+              v-else
+              @click="handleToggleStatus(row, 1)"
+            >启用</el-button>
+            <el-button type="danger" size="small" :icon="Delete" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
+
+      <div class="pagination-container">
+        <el-pagination
+          v-model:current-page="pageNum"
+          v-model:page-size="pageSize"
+          :page-sizes="[10, 20, 50, 100]"
+          :total="total"
+          layout="total, sizes, prev, pager, next, jumper"
+          background
+          @size-change="handleSizeChange"
+          @current-change="handlePageChange"
+        />
+      </div>
     </div>
 
     <el-dialog
@@ -261,7 +284,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Search, Refresh, Edit, Delete, View } from '@element-plus/icons-vue'
 import {
-  getSupplierList,
+  getSupplierPage,
   addSupplier,
   updateSupplier,
   deleteSupplier,
@@ -272,6 +295,9 @@ const loading = ref(false)
 const submitLoading = ref(false)
 const keyword = ref('')
 const tableData = ref([])
+const total = ref(0)
+const pageNum = ref(1)
+const pageSize = ref(10)
 const dialogVisible = ref(false)
 const dialogTitle = ref('新增供应商')
 const formRef = ref(null)
@@ -320,8 +346,14 @@ const rules = {
 const fetchList = async () => {
   loading.value = true
   try {
-    const res = await getSupplierList(keyword.value)
-    tableData.value = res.data || []
+    const res = await getSupplierPage({
+      keyword: keyword.value,
+      pageNum: pageNum.value,
+      pageSize: pageSize.value
+    })
+    const pageData = res.data || {}
+    tableData.value = pageData.records || []
+    total.value = pageData.total || 0
   } finally {
     loading.value = false
   }
@@ -329,6 +361,18 @@ const fetchList = async () => {
 
 const handleReset = () => {
   keyword.value = ''
+  pageNum.value = 1
+  fetchList()
+}
+
+const handlePageChange = (val) => {
+  pageNum.value = val
+  fetchList()
+}
+
+const handleSizeChange = (val) => {
+  pageSize.value = val
+  pageNum.value = 1
   fetchList()
 }
 

@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 
-export function getSupplierList(keyword) {
+export function getSupplierPage(params) {
   return request({
-    url: '/suppliers',
+    url: '/suppliers/page',
     method: 'get',
-    params: { keyword }
+    params
   })
 }
 

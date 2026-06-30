@@ -1,13 +1,12 @@
 package com.chengm.supplier.controller;
 
+import com.chengm.supplier.common.PageResult;
 import com.chengm.supplier.common.Result;
 import com.chengm.supplier.entity.Supplier;
 import com.chengm.supplier.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/suppliers")
@@ -16,9 +15,12 @@ public class SupplierController {
     @Autowired
     private SupplierService supplierService;
 
-    @GetMapping
-    public Result<List<Supplier>> list(@RequestParam(required = false) String keyword) {
-        return Result.success(supplierService.list(keyword));
+    @GetMapping("/page")
+    public Result<PageResult<Supplier>> page(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "1") long pageNum,
+            @RequestParam(defaultValue = "10") long pageSize) {
+        return Result.success(supplierService.page(keyword, pageNum, pageSize));
     }
 
     @GetMapping("/{id}")

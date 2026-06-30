@@ -1,11 +1,13 @@
 package com.chengm.supplier.service.impl;
 
+import com.chengm.supplier.common.PageResult;
 import com.chengm.supplier.entity.Supplier;
 import com.chengm.supplier.mapper.SupplierMapper;
 import com.chengm.supplier.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -22,17 +24,12 @@ public class SupplierServiceImpl implements SupplierService {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public List<Supplier> list(String keyword) {
-        if (keyword == null || keyword.trim().isEmpty()) {
-            Object cached = redisTemplate.opsForValue().get(SUPPLIER_CACHE_KEY);
-            if (cached != null) {
-                return (List<Supplier>) cached;
-            }
-            List<Supplier> list = supplierMapper.selectList(null);
-            redisTemplate.opsForValue().set(SUPPLIER_CACHE_KEY, list, 10, TimeUnit.MINUTES);
-            return list;
-        }
-        return supplierMapper.selectList(keyword.trim());
+    public PageResult<Supplier> page(String keyword, long pageNum, long pageSize) {
+        String trimmedKeyword = StringUtils.hasText(keyword) ? keyword.trim() : null;
+        long offset = (pageNum - 1) * pageSize;
+        List<Supplier> records = supplierMapper.selectPage(trimmedKeyword, offset, pageSize);
+        long total = supplierMapper.selectCount(trimmedKeyword);
+        return new PageResult<>(records, total, pageNum, pageSize);
     }
 
     @Override
@@ -42,9 +39,15 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public void add(Supplier supplier) {
-        Supplier exist = supplierMapper.selectByName(supplier.getSupplierName());
-        if (exist != null) {
+        Supplier nameExist = supplierMapper.selectByName(supplier.getSupplierName());
+        if (nameExist != null) {
             throw new RuntimeException("供应商名称已存在");
+        }
+        if (StringUtils.hasText(supplier.getUnifiedSocialCreditCode())) {
+            Supplier codeExist = supplierMapper.selectByUnifiedSocialCreditCode(supplier.getUnifiedSocialCreditCode());
+            if (codeExist != null) {
+                throw new RuntimeException("统一社会信用代码已存在");
+            }
         }
         if (supplier.getStatus() == null) {
             supplier.setStatus(1);
@@ -63,6 +66,16 @@ public class SupplierServiceImpl implements SupplierService {
             Supplier nameExist = supplierMapper.selectByName(supplier.getSupplierName());
             if (nameExist != null) {
                 throw new RuntimeException("供应商名称已存在");
+            }
+        }
+        String newCode = supplier.getUnifiedSocialCreditCode();
+        String oldCode = exist.getUnifiedSocialCreditCode();
+        boolean codeChanged = (newCode == null && oldCode != null)
+                || (newCode != null && !newCode.equals(oldCode));
+        if (codeChanged && StringUtils.hasText(newCode)) {
+            Supplier codeExist = supplierMapper.selectByUnifiedSocialCreditCode(newCode);
+            if (codeExist != null) {
+                throw new RuntimeException("统一社会信用代码已存在");
             }
         }
         supplierMapper.update(supplier);
